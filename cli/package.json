@@ -1,0 +1,33 @@
+{
+  "name": "@magicbro/cli",
+  "version": "0.6.3",
+  "description": "Visual feedback to focused Codex code changes through ACP",
+  "license": "MIT",
+  "bin": {
+    "magicbro": "./bin/magicbro.mjs"
+  },
+  "files": [
+    "acp-runtime.mjs",
+    "bin",
+    "scripts",
+    "package-assets",
+    "server.mjs",
+    "README.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "scripts": {
+    "sync:assets": "node scripts/sync-assets.mjs",
+    "prepack": "npm run sync:assets",
+    "start": "node server.mjs",
+    "dev": "npm run sync:assets && node --watch server.mjs",
+    "check": "npm run sync:assets && node --check server.mjs && node --check acp-runtime.mjs && node --check package-assets/magicbro.user.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@agentclientprotocol/codex-acp": "1.12.0",
+    "@agentclientprotocol/sdk": "1.4.0"
+  }
+}

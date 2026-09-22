@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="MagicBro превращает визуальные комментарии на сайте в готовые правки кода вместе с Codex."
+    />
+    <title>MagicBro — покажи, что изменить</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --ink: #f7f5ff;
+        --muted: #aaa4bc;
+        --purple: #9b7cff;
+        --pink: #ff5ea8;
+        --line: #ffffff1a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        overflow-x: hidden;
+        font:
+          16px/1.55 Inter,
+          ui-sans-serif,
+          system-ui,
+          sans-serif;
+        color: var(--ink);
+        background: #0c0912;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        z-index: -1;
+        inset: 0;
+        background:
+          radial-gradient(circle at 78% 8%, #7138c52e 0, transparent 32%),
+          radial-gradient(circle at 8% 42%, #d52f8521 0, transparent 28%);
+        pointer-events: none;
+      }
+      a {
+        color: inherit;
+      }
+      button {
+        font: inherit;
+        padding: 11px 16px;
+      }
+      .site-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: min(1180px, calc(100% - 40px));
+        margin: 0 auto;
+        padding: 24px 0;
+      }
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: white;
+        font-size: 20px;
+        font-weight: 850;
+        letter-spacing: -0.04em;
+        text-decoration: none;
+      }
+      .logo__mark {
+        display: grid;
+        width: 34px;
+        height: 34px;
+        place-items: center;
+        border: 1px solid #ffffff29;
+        border-radius: 10px;
+        background: linear-gradient(145deg, #8b5cf6, #db2777);
+        box-shadow: 0 8px 28px #8b5cf64d;
+      }
+      .site-nav {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+      }
+      .site-nav a {
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 650;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+      .site-nav a:hover {
+        color: white;
+      }
+      .nav-cta {
+        padding: 9px 14px;
+        border: 1px solid #ffffff24;
+        border-radius: 999px;
+        color: white !important;
+        background: #ffffff0d;
+      }
+      main {
+        width: min(1180px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(380px, 0.95fr);
+        align-items: center;
+        gap: 72px;
+        min-height: 590px;
+        padding: 64px 0 90px;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        margin: 0 0 22px;
+        padding: 7px 11px;
+        border: 1px solid #9b7cff4d;
+        border-radius: 999px;
+        color: #d5c9ff;
+        background: #9b7cff12;
+        font-size: 13px;
+        font-weight: 750;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .eyebrow::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #b69cff;
+        box-shadow: 0 0 12px #b69cff;
+      }
+      .hero h1 {
+        max-width: 700px;
+        margin: 0;
+        font-size: clamp(50px, 6vw, 86px);
+        line-height: 0.98;
+        letter-spacing: -0.065em;
+      }
+      .hero h1 span {
+        color: transparent;
+        background: linear-gradient(100deg, #b69cff 10%, #ff72b7 80%);
+        background-clip: text;
+        -webkit-background-clip: text;
+      }
+      .hero__lead {
+        max-width: 590px;
+        margin: 28px 0 0;
+        color: #c0bacd;
+        font-size: 19px;
+        line-height: 1.65;
+      }
+      .hero__actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 14px;
+        margin-top: 34px;
+      }
+      .primary-link,
+      .secondary-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 50px;
+        padding: 0 21px;
+        border-radius: 14px;
+        font-weight: 750;
+        text-decoration: none;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease,
+          border-color 0.2s ease;
+      }
+      .primary-link {
+        color: #150b1d;
+        background: linear-gradient(135deg, #c4b5fd, #f9a8d4);
+        box-shadow: 0 12px 30px #c084fc33;
+      }
+      .secondary-link {
+        border: 1px solid #ffffff24;
+        color: white;
+        background: #ffffff0a;
+      }
+      .primary-link:hover,
+      .secondary-link:hover {
+        transform: translateY(-2px);
+      }
+      .secondary-link:hover {
+        border-color: #ffffff52;
+      }
+      .hero__note {
+        margin: 20px 0 0;
+        color: #777184;
+        font-size: 13px;
+      }
+      .hero__visual {
+        position: relative;
+        min-height: 430px;
+      }
+      .browser {
+        position: absolute;
+        top: 8px;
+        right: 0;
+        width: min(100%, 500px);
+        overflow: hidden;
+        border: 1px solid #ffffff20;
+        border-radius: 24px;
+        background: #17121f;
+        box-shadow:
+          0 36px 100px #00000080,
+          0 0 70px #8b5cf621;
+        transform: rotate(1.5deg);
+      }
+      .browser__bar {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        height: 42px;
+        padding: 0 15px;
+        border-bottom: 1px solid #ffffff12;
+        background: #110d17;
+      }
+      .browser__dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #50495d;
+      }
+      .browser__url {
+        width: 56%;
+        height: 18px;
+        margin-left: 8px;
+        border-radius: 5px;
+        background: #ffffff0a;
+      }
+      .browser__canvas {
+        position: relative;
+        min-height: 320px;
+        padding: 44px 38px;
+        background: linear-gradient(145deg, #f5f3ff, #ede9fe);
+        color: #21182b;
+      }
+      .mock-title {
+        width: 62%;
+        height: 22px;
+        border-radius: 6px;
+        background: #21182b;
+      }
+      .mock-copy {
+        width: 82%;
+        height: 10px;
+        margin-top: 17px;
+        border-radius: 5px;
+        background: #8c8294;
+        box-shadow: 0 20px #b0a8b7;
+      }
+      .selection-box {
+        position: absolute;
+        right: 35px;
+        bottom: 42px;
+        width: 68%;
+        height: 135px;
+        border: 2px solid #7c3aed;
+        border-radius: 13px;
+        background: #8b5cf60b;
+        box-shadow:
+          0 0 0 3px #ffffffb3,
+          0 14px 30px #5b21b633;
+      }
+      .selection-label {
+        position: absolute;
+        top: -32px;
+        left: -2px;
+        padding: 5px 9px;
+        border-radius: 7px 7px 7px 0;
+        color: white;
+        background: #7c3aed;
+        font:
+          700 12px/1.2 ui-monospace,
+          monospace;
+      }
+      .prompt-card {
+        position: absolute;
+        z-index: 2;
+        right: -22px;
+        bottom: -10px;
+        width: 270px;
+        padding: 15px;
+        border: 1px solid #ffffff24;
+        border-radius: 16px;
+        background: #201729e8;
+        box-shadow: 0 18px 50px #0009;
+        backdrop-filter: blur(14px);
+      }
+      .prompt-card__top {
+        display: flex;
+        justify-content: space-between;
+        color: #b9b1c4;
+        font-size: 12px;
+      }
+      .prompt-card p {
+        margin: 12px 0 14px;
+        color: white;
+        font-size: 14px;
+      }
+      .prompt-card__send {
+        float: right;
+        padding: 7px 10px;
+        border: 0;
+        border-radius: 8px;
+        color: white;
+        background: #7c3aed;
+        font-size: 12px;
+      }
+      .section {
+        padding: 96px 0;
+      }
+      .section-kicker {
+        margin: 0 0 12px;
+        color: #ad91ff;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .section h2 {
+        max-width: 720px;
+        margin: 0;
+        font-size: clamp(34px, 4vw, 54px);
+        line-height: 1.06;
+        letter-spacing: -0.045em;
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        margin-top: 48px;
+      }
+      .step {
+        min-height: 245px;
+        padding: 26px;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: linear-gradient(145deg, #ffffff0c, #ffffff04);
+      }
+      .step__number {
+        display: grid;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        border: 1px solid #aa8dff55;
+        border-radius: 12px;
+        color: #cdbfff;
+        background: #9b7cff14;
+        font:
+          700 13px/1 ui-monospace,
+          monospace;
+      }
+      .step h3 {
+        margin: 42px 0 10px;
+        font-size: 21px;
+      }
+      .step p {
+        margin: 0;
+        color: var(--muted);
+      }
+      .demo-section {
+        position: relative;
+        padding-top: 70px;
+      }
+      .demo-section::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 120px;
+        left: 50%;
+        width: 80vw;
+        height: 520px;
+        border-radius: 50%;
+        background: #7c3aed1a;
+        filter: blur(100px);
+        transform: translateX(-50%);
+        pointer-events: none;
+      }
+      .demo-heading {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 30px;
+        margin-bottom: 28px;
+      }
+      .demo-heading p {
+        max-width: 430px;
+        margin: 0;
+        color: var(--muted);
+      }
+      .card {
+        position: relative;
+        overflow: hidden;
+        padding: 0 34px 34px;
+        border: 1px solid #ffffff24;
+        border-radius: 26px;
+        background-color: #f8f7fc;
+        background-image:
+          linear-gradient(#7c3aed0a 1px, transparent 1px),
+          linear-gradient(90deg, #7c3aed0a 1px, transparent 1px);
+        background-size: 24px 24px;
+        color: #172033;
+        box-shadow:
+          0 30px 80px #00000059,
+          0 0 0 1px #7c3aed12 inset;
+      }
+      #test-card {
+        border-color: #60a5fa;
+        background-image:
+          linear-gradient(#2563eb14 1px, transparent 1px),
+          linear-gradient(90deg, #2563eb14 1px, transparent 1px),
+          radial-gradient(circle at 86% 12%, #bfdbfe99, transparent 28%),
+          linear-gradient(145deg, #eff6ff, #f8f7fc 48%, #eef2ff);
+        box-shadow:
+          0 0 0 4px #60a5fa33,
+          0 30px 80px #1d4ed855,
+          0 0 48px #60a5fa66,
+          inset 0 0 34px #dbeafe99;
+      }
+      .card__chrome {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        height: 48px;
+        margin: 0 -34px 28px;
+        padding: 0 18px;
+        border-bottom: 1px solid #ddd8e6;
+        background: #fffdfaeb;
+        backdrop-filter: blur(10px);
+      }
+      .card__chrome-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #d4cddc;
+      }
+      .card__chrome-address {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        min-width: 210px;
+        margin: 0 auto;
+        padding: 5px 12px;
+        border: 1px solid #ece8f1;
+        border-radius: 7px;
+        color: #81788c;
+        background: white;
+        font:
+          600 11px/1.2 ui-monospace,
+          monospace;
+      }
+      .card__chrome-address::before {
+        content: "●";
+        color: #4ade80;
+        font-size: 8px;
+      }
+      .card__status {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: #695e77;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .card__status::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #22c55e;
+        box-shadow: 0 0 0 4px #22c55e1f;
+      }
+      .practice-copy {
+        margin: 0;
+        padding: 28px 0;
+        color: #5f6674;
+      }
+      @media (max-width: 1000px) {
+        .hero {
+          grid-template-columns: 1fr;
+          padding-top: 70px;
+        }
+        .hero__content {
+          max-width: 760px;
+        }
+        .hero__visual {
+          width: min(620px, 95%);
+          margin: 0 auto;
+        }
+      }
+      @media (max-width: 720px) {
+        .site-header {
+          padding: 18px 0;
+        }
+        .site-nav a:not(.nav-cta) {
+          display: none;
+        }
+        .hero {
+          gap: 34px;
+          min-height: auto;
+          padding: 48px 0 70px;
+        }
+        .hero h1 {
+          font-size: clamp(44px, 14vw, 68px);
+        }
+        .hero__lead {
+          font-size: 17px;
+        }
+        .hero__visual {
+          min-height: 365px;
+          width: 100%;
+        }
+        .browser__canvas {
+          min-height: 275px;
+          padding: 38px 26px;
+        }
+        .prompt-card {
+          right: 12px;
+          width: 240px;
+        }
+        .section {
+          padding: 72px 0;
+        }
+        .steps {
+          grid-template-columns: 1fr;
+        }
+        .step {
+          min-height: 205px;
+        }
+        .step h3 {
+          margin-top: 28px;
+        }
+        .demo-heading {
+          display: block;
+        }
+        .demo-heading p {
+          margin-top: 16px;
+        }
+        .card {
+          padding: 0 22px 22px;
+        }
+        .card__chrome {
+          margin: 0 -22px 24px;
+        }
+        .card__chrome-address {
+          min-width: 0;
+        }
+        .card__status {
+          font-size: 0;
+        }
+      }
+      @media (max-width: 430px) {
+        main,
+        .site-header {
+          width: min(100% - 28px, 1180px);
+        }
+        .hero__actions {
+          align-items: stretch;
+          flex-direction: column;
+        }
+        .browser {
+          transform: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        .primary-link,
+        .secondary-link {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="logo" href="#top" aria-label="MagicBro — на главную"
+        ><span class="logo__mark" aria-hidden="true">✦</span>MagicBro</a
+      >
+      <nav class="site-nav" aria-label="Основная навигация">
+        <a href="#how-it-works">Как работает</a>
+        <a href="./demo.en.html" lang="en">EN</a>
+        <a class="nav-cta" href="#demo">Попробовать</a>
+      </nav>
+    </header>
+    <main>
+      <section class="hero" id="top">
+        <div class="hero__content">
+          <p class="eyebrow">Visual feedback → working code</p>
+          <h1>Покажи, что изменить. <span>MagicBro сделает.</span></h1>
+          <p class="hero__lead">
+            Выдели любой элемент прямо на странице, напиши комментарий — и
+            передай Codex точный контекст вместе со скриншотом. Без длинных
+            описаний и поисков нужного файла.
+          </p>
+          <div class="hero__actions">
+            <a class="primary-link" href="#demo">Попробовать демо&nbsp; ✦</a>
+            <a class="secondary-link" href="#how-it-works">Как это работает</a>
+          </div>
+          <p class="hero__note">
+            Локальный инструмент · Работает с твоим проектом · Codex ACP
+          </p>
+        </div>
+        <div
+          class="hero__visual"
+          aria-label="Пример выделения элемента с комментарием"
+        >
+          <div class="browser" aria-hidden="true">
+            <div class="browser__bar">
+              <span class="browser__dot"></span
+              ><span class="browser__dot"></span
+              ><span class="browser__dot"></span
+              ><span class="browser__url"></span>
+            </div>
+            <div class="browser__canvas">
+              <div class="mock-title"></div>
+              <div class="mock-copy"></div>
+              <div class="selection-box">
+                <span class="selection-label">section.hero</span>
+              </div>
+            </div>
+          </div>
+          <div class="prompt-card">
+            <div class="prompt-card__top">
+              <span>✦ MagicBro</span><span>⌥ M</span>
+            </div>
+            <p>Сделай этот блок выразительнее и добавь воздуха</p>
+            <button class="prompt-card__send" type="button" tabindex="-1">
+              Отправить ↗
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="how-it-works">
+        <p class="section-kicker">Три простых шага</p>
+        <h2>От мысли до правки — прямо на странице</h2>
+        <div class="steps">
+          <article class="step">
+            <span class="step__number">01</span>
+            <h3>Выдели</h3>
+            <p>
+              Кликни по элементу или обведи область. MagicBro соберёт
+              DOM-контекст и снимок экрана.
+            </p>
+          </article>
+          <article class="step">
+            <span class="step__number">02</span>
+            <h3>Объясни</h3>
+            <p>
+              Напиши изменение обычными словами. Больше не нужно угадывать
+              название компонента или CSS-класс.
+            </p>
+          </article>
+          <article class="step">
+            <span class="step__number">03</span>
+            <h3>Получи правку</h3>
+            <p>
+              Codex найдёт исходники, внесёт изменение и проверит проект.
+              Страница обновится автоматически.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section demo-section" id="demo">
+        <div class="demo-heading">
+          <div>
+            <p class="section-kicker">Живое демо</p>
+            <h2>Попробуй магию</h2>
+          </div>
+          <p>Открой MagicBro через плавающую кнопку в углу страницы.</p>
+        </div>
+        <div class="card" id="test-card">
+          <div class="card__chrome" aria-hidden="true">
+            <span class="card__chrome-dot"></span
+            ><span class="card__chrome-dot"></span
+            ><span class="card__chrome-dot"></span>
+            <span class="card__chrome-address">localhost:4173/demo</span>
+            <span class="card__status">MagicBro готов</span>
+          </div>
+          <p class="practice-copy">Выдели этот текст и напиши, что изменить.</p>
+        </div>
+      </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="/magicbro.user.js"></script>
+  </body>
+</html>

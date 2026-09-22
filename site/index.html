@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en" data-language="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0c0814" />
+    <meta
+      name="description"
+      content="MagicBro turns visual feedback on a running website into focused Codex code changes."
+    />
+    <title>MagicBro — Point. Explain. Ship.</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
+
+    <header class="nav-wrap">
+      <nav class="nav shell" aria-label="Main navigation">
+        <a class="brand" href="#top" aria-label="MagicBro home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
+          <span>MagicBro</span>
+        </a>
+        <div class="nav-links">
+          <a href="#workflow" data-i18n="navHow">How it works</a>
+          <a href="#features" data-i18n="navFeatures">Features</a>
+          <a href="#install" data-i18n="navInstall">Install</a>
+        </div>
+        <div class="nav-actions">
+          <div class="language-switch" role="group" aria-label="Language">
+            <button type="button" data-language-button="en" aria-pressed="true">
+              EN
+            </button>
+            <button
+              type="button"
+              data-language-button="ru"
+              aria-pressed="false"
+            >
+              RU
+            </button>
+          </div>
+          <a
+            class="button button-small button-ghost"
+            href="#install"
+            data-i18n="navStart"
+            >Get started</a
+          >
+        </div>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero shell" id="top">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">
+            <span class="pulse"></span
+            ><span data-i18n="heroEyebrow">Visual feedback for Codex</span>
+          </p>
+          <h1 data-i18n="heroTitle">
+            Point at the UI. Say what should change. Ship it.
+          </h1>
+          <p class="hero-lead" data-i18n="heroLead">
+            MagicBro gives Codex the exact element, screenshot, page context,
+            and your words — so visual feedback becomes a focused code change.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#install"
+              ><span data-i18n="heroCta">Install MagicBro</span
+              ><span aria-hidden="true">→</span></a
+            >
+            <a class="button button-secondary" href="#workflow"
+              ><span class="play" aria-hidden="true">▶</span
+              ><span data-i18n="heroSecondary">See how it works</span></a
+            >
+          </div>
+          <ul class="hero-notes" aria-label="Highlights">
+            <li>
+              <span>✓</span><span data-i18n="noteLocal">Local-first</span>
+            </li>
+            <li>
+              <span>✓</span
+              ><span data-i18n="noteSession">One persistent ACP session</span>
+            </li>
+            <li>
+              <span>✓</span><span data-i18n="noteLicense">MIT licensed</span>
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="hero-visual reveal delay-1"
+          aria-label="MagicBro interface preview"
+        >
+          <div class="orb orb-one"></div>
+          <div class="orb orb-two"></div>
+          <div class="browser-card">
+            <div class="browser-top">
+              <div class="traffic"><i></i><i></i><i></i></div>
+              <div class="address">localhost:3000/dashboard</div>
+              <div class="browser-menu">•••</div>
+            </div>
+            <div class="browser-body">
+              <div class="mock-sidebar">
+                <div class="mock-logo"></div>
+                <i></i><i></i><i></i><i></i>
+              </div>
+              <div class="mock-content">
+                <div class="mock-heading"><i></i><span></span></div>
+                <div class="mock-stats"><i></i><i></i><i></i></div>
+                <div class="selected-card">
+                  <div class="handle h1"></div>
+                  <div class="handle h2"></div>
+                  <div class="handle h3"></div>
+                  <div class="handle h4"></div>
+                  <span class="element-tag">div.analytics-card</span>
+                  <div class="chart-bars">
+                    <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                  </div>
+                  <div class="cursor">
+                    <svg viewBox="0 0 28 34" aria-hidden="true">
+                      <path d="M3 2 23 23l-10 1-5 8z" /></svg
+                    ><b>you</b>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="prompt-card">
+            <div class="prompt-avatar">M</div>
+            <p data-i18n="mockPrompt">
+              Make this chart easier to read and add the comparison with last
+              week.
+            </p>
+            <button type="button" tabindex="-1">
+              <span data-i18n="mockSend">Send to Codex</span><span>⌘↵</span>
+            </button>
+          </div>
+          <div class="status-pill">
+            <span></span
+            ><span data-i18n="mockStatus">Codex is editing 2 files</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="signal-strip" aria-label="Product capabilities">
+        <div class="shell signal-row">
+          <span data-i18n="signalOne">Exact DOM context</span><i>✦</i>
+          <span data-i18n="signalTwo">Area & point selection</span><i>✦</i>
+          <span data-i18n="signalThree">Live progress</span><i>✦</i>
+          <span data-i18n="signalFour">Cancel anytime</span>
+        </div>
+      </section>
+
+      <section class="section shell" id="workflow">
+        <div class="section-heading reveal">
+          <p class="eyebrow" data-i18n="workflowEyebrow">
+            From “this bit” to a real diff
+          </p>
+          <h2 data-i18n="workflowTitle">A feedback loop that speaks UI.</h2>
+          <p data-i18n="workflowLead">
+            No selector hunting. No screenshot archaeology. Just show MagicBro
+            the thing you mean.
+          </p>
+        </div>
+        <div class="steps">
+          <article class="step reveal">
+            <span class="step-number">01</span>
+            <div class="step-icon select-icon" aria-hidden="true">
+              <span></span><i></i>
+            </div>
+            <h3 data-i18n="stepOneTitle">Select</h3>
+            <p data-i18n="stepOneText">
+              Click an element or draw around an area on the running page.
+            </p>
+          </article>
+          <article class="step reveal delay-1">
+            <span class="step-number">02</span>
+            <div class="step-icon explain-icon" aria-hidden="true">
+              <span></span><i></i><b></b>
+            </div>
+            <h3 data-i18n="stepTwoTitle">Explain</h3>
+            <p data-i18n="stepTwoText">
+              Describe the result in your own words — as briefly or precisely as
+              you like.
+            </p>
+          </article>
+          <article class="step reveal delay-2">
+            <span class="step-number">03</span>
+            <div class="step-icon ship-icon" aria-hidden="true">
+              <span>✓</span><i></i>
+            </div>
+            <h3 data-i18n="stepThreeTitle">Ship</h3>
+            <p data-i18n="stepThreeText">
+              Codex finds the source, edits the right files, and streams
+              progress back.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section feature-section" id="features">
+        <div class="shell">
+          <div class="section-heading centered reveal">
+            <p class="eyebrow" data-i18n="featuresEyebrow">
+              Context without the handoff tax
+            </p>
+            <h2 data-i18n="featuresTitle">
+              Built for the messy middle of frontend work.
+            </h2>
+          </div>
+          <div class="feature-grid">
+            <article class="feature feature-wide reveal">
+              <div class="feature-copy">
+                <span class="feature-kicker">01 / CONTEXT</span>
+                <h3 data-i18n="featureContextTitle">More than a screenshot.</h3>
+                <p data-i18n="featureContextText">
+                  MagicBro captures DOM structure, text ranges, coordinates,
+                  viewport data, loaded assets, and the visual selection.
+                </p>
+              </div>
+              <div class="context-stack" aria-hidden="true">
+                <div><span>&lt;article class="card"&gt;</span><b>DOM</b></div>
+                <div><span>1248 × 780 · DPR 2</span><b>VIEWPORT</b></div>
+                <div><span>selected-area.png</span><b>IMAGE</b></div>
+              </div>
+            </article>
+            <article class="feature reveal">
+              <span class="feature-kicker">02 / SESSION</span>
+              <div class="session-visual" aria-hidden="true">
+                <i></i><span></span><i></i><span></span><i></i>
+              </div>
+              <h3 data-i18n="featureSessionTitle">Keeps the conversation.</h3>
+              <p data-i18n="featureSessionText">
+                One persistent ACP session carries context across every
+                follow-up.
+              </p>
+            </article>
+            <article class="feature reveal delay-1">
+              <span class="feature-kicker">03 / CONTROL</span>
+              <div class="control-visual" aria-hidden="true">
+                <span>Running</span><i></i><button>Cancel</button>
+              </div>
+              <h3 data-i18n="featureControlTitle">
+                Visible and interruptible.
+              </h3>
+              <p data-i18n="featureControlText">
+                Watch live activity, cancel a run, and choose the model and
+                reasoning level.
+              </p>
+            </article>
+            <article class="feature feature-wide local-feature reveal">
+              <div class="feature-copy">
+                <span class="feature-kicker">04 / LOCAL</span>
+                <h3 data-i18n="featureLocalTitle">
+                  Your project stays your project.
+                </h3>
+                <p data-i18n="featureLocalText">
+                  The CLI runs from your workspace. The userscript talks to
+                  localhost. Codex edits the directory you launched MagicBro
+                  from.
+                </p>
+              </div>
+              <div class="terminal-mini" aria-hidden="true">
+                <div><i></i><i></i><i></i></div>
+                <p><span>$</span> cd ~/projects/my-app</p>
+                <p><span>$</span> magicbro</p>
+                <p class="success">● Ready on localhost:4173</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section install-section shell" id="install">
+        <div class="install-card reveal">
+          <div class="install-copy">
+            <p class="eyebrow" data-i18n="installEyebrow">
+              Two minutes to first feedback
+            </p>
+            <h2 data-i18n="installTitle">
+              Add the script. Start the CLI. Point.
+            </h2>
+            <p data-i18n="installLead">
+              MagicBro needs Node.js 20+, an existing Codex login, and
+              Tampermonkey or Violentmonkey.
+            </p>
+            <a
+              class="button button-secondary"
+              href="./magicbro.user.js"
+              data-i18n="download"
+              >Download userscript</a
+            >
+            <ol>
+              <li>
+                <span>1</span>
+                <p>
+                  <strong data-i18n="installOneTitle">Install the CLI</strong
+                  ><small data-i18n="installOneText"
+                    >Install the package globally from npm.</small
+                  >
+                </p>
+              </li>
+              <li>
+                <span>2</span>
+                <p>
+                  <strong data-i18n="installTwoTitle">Add the userscript</strong
+                  ><small data-i18n="installTwoText"
+                    >Paste the userscript into your browser extension.</small
+                  >
+                </p>
+              </li>
+              <li>
+                <span>3</span>
+                <p>
+                  <strong data-i18n="installThreeTitle"
+                    >Run it in your project</strong
+                  ><small data-i18n="installThreeText"
+                    >Launch MagicBro from the directory Codex should
+                    edit.</small
+                  >
+                </p>
+              </li>
+            </ol>
+          </div>
+          <div class="terminal" aria-label="Installation commands">
+            <div class="terminal-top">
+              <div><i></i><i></i><i></i></div>
+              <span>Terminal</span
+              ><button
+                class="copy-button"
+                type="button"
+                data-copy="npm install --global @magicbro/cli"
+                aria-label="Copy install command"
+              >
+                <span data-i18n="copy">Copy</span>
+              </button>
+            </div>
+            <div class="terminal-body">
+              <p class="comment" data-i18n="terminalCommentOne">
+                # Install once
+              </p>
+              <p>
+                <span class="prompt">$</span> npm install --global @magicbro/cli
+              </p>
+              <p class="comment spacer" data-i18n="terminalCommentTwo">
+                # Run inside any project
+              </p>
+              <p><span class="prompt">$</span> cd ~/projects/my-app</p>
+              <p><span class="prompt">$</span> magicbro</p>
+              <p class="terminal-output">
+                <span>◆</span> MagicBro backend: http://127.0.0.1:4173
+              </p>
+              <p class="terminal-output">
+                <span>◆</span>
+                <span data-i18n="terminalReady">Codex ACP session ready</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="closing shell reveal">
+        <div class="closing-glow"></div>
+        <p class="eyebrow" data-i18n="closingEyebrow">
+          Stop describing where. Start describing what.
+        </p>
+        <h2 data-i18n="closingTitle">Your UI already knows the context.</h2>
+        <p data-i18n="closingText">Let MagicBro hand it to Codex.</p>
+        <a class="button button-primary" href="#install"
+          ><span data-i18n="closingCta">Get started</span
+          ><span aria-hidden="true">→</span></a
+        >
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell footer-row">
+        <a class="brand" href="#top"
+          ><span class="brand-mark" aria-hidden="true"><i></i><i></i></span
+          ><span>MagicBro</span></a
+        >
+        <p>© 2026 MagicBro · MIT</p>
+        <p data-i18n="footer">Point. Explain. Ship.</p>
+      </div>
+    </footer>
+  </body>
+</html>
